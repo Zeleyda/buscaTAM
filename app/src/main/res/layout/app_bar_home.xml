@@ -27,7 +27,7 @@
             android:layout_height="48dp"
             android:autofillHints="editText"
             android:inputType="text"
-            android:text="@string/hint_text"
+            android:text="Buscar"
             android:labelFor="@+id/editText"
             android:maxWidth="300dp"/>
 
