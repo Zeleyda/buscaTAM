@@ -8,4 +8,5 @@ data class Persons(
     var image: Bitmap,
     var curp: String,
     var enabled: Boolean
+
     )
