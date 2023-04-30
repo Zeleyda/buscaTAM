@@ -37,6 +37,7 @@ class MyAdapter(private val personsList: ArrayList<Persons>): RecyclerView.Adapt
         holder.title.setText(title)
         holder.description.setText(currentItem.description)
         holder.image.setImageBitmap(currentItem.image)
+
     }
 
     class MyViewHolder(itemView: View, listener: onItemClickListener):RecyclerView.ViewHolder(itemView){

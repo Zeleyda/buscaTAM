@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:gravity="center"
-        android:background="##00ff00"
+        android:background="#CBFF7FD2"
         android:orientation="horizontal"
         >
 
