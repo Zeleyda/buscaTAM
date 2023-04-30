@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "569027979448",
+    "project_id": "personasapp-1aaf0",
+    "storage_bucket": "personasapp-1aaf0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569027979448:android:762e783a02c6866642ec4d",
+        "android_client_info": {
+          "package_name": "com.robles.itcm.ptampersonas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569027979448-vvfuuapbomdkju4onj67943bbllobuq7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.robles.itcm.ptampersonas",
+            "certificate_hash": "2c131fca243bf2ec6a444f57981f9e950ac66c3c"
+          }
+        },
+        {
+          "client_id": "569027979448-ket0i50aicu8gi78hbrhdlf5lbdu89a2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR2S7hgrrwqIf62Y-GDzdTB-Ut_6qmFyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569027979448-ket0i50aicu8gi78hbrhdlf5lbdu89a2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_persons">
+
+    <fragment
+        android:id="@+id/nav_persons"
+        android:name="com.robles.itcm.ptampersonas.ui.fragments.PersonasFragment"
+        android:label="Lista de personas"
+        tools:layout="@layout/fragment_personas" />
+
+    <fragment
+        android:id="@+id/nav_addperson"
+        android:name="com.robles.itcm.ptampersonas.ui.fragments.AddPersonFragment"
+        android:label="Persona desaparecida"
+        tools:layout="@layout/fragment_add_person" />
+
+    <fragment
+        android:id="@+id/nav_editperson"
+        android:name="com.robles.itcm.ptampersonas.ui.fragments.EditPersonFragment"
+        android:label="Editar persona"
+        tools:layout="@layout/fragment_edit_person" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.robles.itcm.ptampersonas.ui.fragments.ProfileFragment"
+        android:label="Editar perfil"
+        tools:layout="@layout/fragment_profile"/>
+
+    <fragment
+        android:id="@+id/nav_logout"
+        android:name="com.robles.itcm.ptampersonas.ui.fragments.LogoutFragment"
+        android:label="Editar perfil"
+        tools:layout="@layout/fragment_logout"/>
+
+</navigation>

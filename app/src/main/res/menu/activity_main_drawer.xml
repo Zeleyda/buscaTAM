@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="Menu de opciones">
+
+        <menu>
+            <item
+                android:id="@+id/nav_persons"
+                android:icon="@drawable/persons"
+                android:title="Personas" />
+            <item
+                android:id="@+id/nav_addperson"
+                android:icon="@drawable/iconadd"
+                android:title="Agregar persona" />
+            <item
+                android:id="@+id/nav_editperson"
+                android:icon="@drawable/organizer_1_"
+                android:title="Organizaciones" />
+        </menu>
+
+    </item>
+
+    <item android:title="Tu">
+        <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/user"
+                android:title="Perfil" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout"
+                android:title="Cerrar sesión" />
+        </menu>
+    </item>
+</menu>

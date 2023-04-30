@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.EditPersonFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="131dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:id="@+id/tvLeyenda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="15dp"
+            android:text="Organizaciones ubicadas en la zona que pueden contribuir a la busqueda. "
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold"
+
+            />
+
+
+        <!-- Organizacion 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:orientation="horizontal">
+
+            <!-- Imagen de la organización 1 -->
+            <ImageView
+                android:layout_margin="5dp"
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/organizacion1" />
+
+            <!-- Título y descripción de la organización 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comisión Estatal de Búsqueda de Personas Tamaulipas"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="+52 834 688 5075" />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- Fin organizacion 1-->
+
+        <!-- Organizacion 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:orientation="horizontal">
+
+            <!-- Imagen de la organización 2 -->
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/mylinali" />
+
+            <!-- Título y descripción de la organización 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mylinali Red Asociación Civil"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="https://www.facebook.com/profile.php?id=100064439063925" />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- Fin organizacion 2-->
+
+        <!-- Organizacion 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:orientation="horizontal">
+
+            <!-- Imagen de la organización 3 -->
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon3" />
+
+            <!-- Título y descripción de la organización 3 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Unidas por el mismo dolor Tamaulipas"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="https://www.facebook.com/profile.php?id=100067415101708" />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- Fin organizacion 3-->
+
+
+    </LinearLayout>
+    </ScrollView>
+</FrameLayout>
