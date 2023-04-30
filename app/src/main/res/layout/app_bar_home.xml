@@ -16,7 +16,24 @@
             android:background="#E465FB"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/Theme.PTamPersonas.PopupOverlay" />
+            app:popupTheme="@style/Theme.PTamPersonas.PopupOverlay"
+
+        />
+
+        <EditText
+            android:id="@+id/editText"
+            android:background="#8C6293"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:autofillHints="editText"
+            android:inputType="text"
+            android:text="@string/hint_text"
+            android:labelFor="@+id/editText"
+            />
+
+
+
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
