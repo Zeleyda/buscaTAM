@@ -31,7 +31,10 @@ class MyAdapter(private val personsList: ArrayList<Persons>): RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = personsList[position]
-        holder.title.setText(currentItem.title)
+        var title = currentItem.title
+        if(!currentItem.enabled)
+            title = "$title \n (No verificada)"
+        holder.title.setText(title)
         holder.description.setText(currentItem.description)
         holder.image.setImageBitmap(currentItem.image)
     }

@@ -165,7 +165,7 @@ class AddPersonFragment : Fragment() {
                     "circunstancia" to txtCircunstancia.text.toString(),
                     "descripcion" to txtDescripcion.text.toString(),
                     "image" to "${txtCurp.text.toString()}.jpg",
-                    "enabled" to true
+                    "enabled" to false
                 )
             ).addOnCompleteListener {
                 if(it.isSuccessful){

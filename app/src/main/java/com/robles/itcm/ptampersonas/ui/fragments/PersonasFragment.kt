@@ -91,18 +91,17 @@ class PersonasFragment : Fragment() {
         val collectionRef = db.collection("persons")
         collectionRef.get().addOnSuccessListener {
             for(document in it.documents){
-                if(document.data?.get("enabled") == false)
-                    continue
                 Log.d(document.id, document.data?.get("name").toString())
                 var imagen: Bitmap? = null
                 val curp = document.data?.get("curp").toString()
                 val name = document.data?.get("name").toString()
                 val lugar = document.data?.get("lugar_desaparicion").toString()
+                val enabled = document.data?.get("enabled") as Boolean
                 FirebaseStorage.getInstance().reference.child("$curp.jpg").getBytes(Long.MAX_VALUE).addOnSuccessListener {bytes ->
                     // Convertir bytes a Bitmap y mostrar en el ImageView
                     imagen = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                 }.addOnSuccessListener {
-                    personsArrayList.add(Persons(name, lugar, imagen!!, curp))
+                    personsArrayList.add(Persons(name, lugar, imagen!!, curp, enabled))
                     adapter = MyAdapter(personsArrayList)
                     recyclerView.adapter = adapter
                     adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
