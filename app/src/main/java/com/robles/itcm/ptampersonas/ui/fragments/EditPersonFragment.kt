@@ -1,10 +1,13 @@
 package com.robles.itcm.ptampersonas.ui.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.robles.itcm.ptampersonas.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -12,15 +15,15 @@ import com.robles.itcm.ptampersonas.R
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [EditPersonFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EditPersonFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var org1: ImageView
+    private lateinit var org2: ImageView
+    private lateinit var org3: ImageView
+    private lateinit var intent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +39,27 @@ class EditPersonFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_person, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        org1 = view.findViewById(R.id.img_org1)
+        org2 = view.findViewById(R.id.img_org2)
+        org3 = view.findViewById(R.id.img_org3)
+        org1.setOnClickListener {
+            intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+52 834 688 5075"))
+            startActivity(intent)
+        }
+
+        org2.setOnClickListener {
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/profile.php?id=100064439063925"))
+            startActivity(intent)
+        }
+
+        org3.setOnClickListener {
+            intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/profile.php?id=100067415101708"))
+            startActivity(intent)
+        }
+        super.onViewCreated(view, savedInstanceState)
     }
 
     companion object {

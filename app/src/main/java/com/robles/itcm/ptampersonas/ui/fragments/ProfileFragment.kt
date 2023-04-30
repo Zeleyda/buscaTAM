@@ -17,12 +17,6 @@ class ProfileFragment : Fragment() {
     lateinit var phone: String
     lateinit var email: String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         val db = FirebaseFirestore.getInstance()
