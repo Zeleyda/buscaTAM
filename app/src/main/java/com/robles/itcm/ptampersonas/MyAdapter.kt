@@ -7,12 +7,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(private val personsList: ArrayList<Persons>): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class MyAdapter(private var personsList: ArrayList<Persons>): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     private lateinit var mListener: onItemClickListener
 
     interface onItemClickListener{
         fun onItemClick(position: Int)
+    }
+
+    fun setFilteredList(filteredList: ArrayList<Persons>)
+    {
+        personsList = filteredList
     }
 
     fun setOnItemClickListener(listener: onItemClickListener){

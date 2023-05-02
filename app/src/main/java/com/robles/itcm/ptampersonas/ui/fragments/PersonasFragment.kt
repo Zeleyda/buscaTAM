@@ -15,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,6 +24,8 @@ import com.robles.itcm.ptampersonas.MyAdapter
 import com.robles.itcm.ptampersonas.PersonInfoActivity
 import com.robles.itcm.ptampersonas.Persons
 import com.robles.itcm.ptampersonas.R
+import java.lang.Character.toLowerCase
+import java.util.Locale
 import java.util.PropertyPermission
 
 // TODO: Rename parameter arguments, choose names that match
@@ -65,20 +68,44 @@ class PersonasFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataInitialize()
-        val layoutManager = LinearLayoutManager(context)
 
         btnSubirImange = view.findViewById(R.id.btn_subir_buscar_imagen)
         txtSearch = view.findViewById(R.id.txt_search_person)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = layoutManager
+        recyclerView.layoutManager = GridLayoutManager(context, 1)
         adapter = MyAdapter(personsArrayList)
         recyclerView.adapter = adapter
 
         btnSubirImange.setOnClickListener { cargarImagen() }
 
+        txtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                filterList(newText)
+                return false
+            }
+        })
 
     }
+
+    private fun filterList(text: String) {
+        val filteredList = ArrayList<Persons>()
+        for (p in personsArrayList) {
+            if (p.title.lowercase().contains(text.lowercase()) ||
+                p.curp.lowercase().contains(text.lowercase())) {
+                filteredList.add(p)
+            }
+        }
+        if (filteredList.isNotEmpty()) {
+            adapter.setFilteredList(filteredList)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
 
     private fun cargarImagen() {
         selectImageLauncher.launch("image/*")
@@ -121,10 +148,7 @@ class PersonasFragment : Fragment() {
                     adapter = MyAdapter(personsArrayList)
                     recyclerView.adapter = adapter
                     adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
-                        override fun onItemClick(position: Int) {
-                            Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
-                            showPersonInfo(position)
-                        }
+                        override fun onItemClick(position: Int) { showPersonInfo(position) }
                     })
                 }
             }
