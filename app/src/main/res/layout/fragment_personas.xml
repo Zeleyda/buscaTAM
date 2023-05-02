@@ -7,11 +7,27 @@
     android:orientation="vertical"
     tools:context=".ui.fragments.PersonasFragment">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/txt_search_person"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/txt_search_person"
+            android:layout_width="1dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/image_button"
+            android:text="@string/subirfoto"
+            android:contentDescription="pene"
+            android:textSize="0sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_camera" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
