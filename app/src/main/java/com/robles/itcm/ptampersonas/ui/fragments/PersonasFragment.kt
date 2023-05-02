@@ -4,13 +4,16 @@ import android.app.Person
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +41,9 @@ class PersonasFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var personsArrayList: ArrayList<Persons>
 
+    private lateinit var btnSubirImange: ImageButton
+    private lateinit var imageUri: Uri
+
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +67,7 @@ class PersonasFragment : Fragment() {
         dataInitialize()
         val layoutManager = LinearLayoutManager(context)
 
+        btnSubirImange = view.findViewById(R.id.btn_subir_buscar_imagen)
         txtSearch = view.findViewById(R.id.txt_search_person)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
@@ -68,6 +75,20 @@ class PersonasFragment : Fragment() {
         adapter = MyAdapter(personsArrayList)
         recyclerView.adapter = adapter
 
+        btnSubirImange.setOnClickListener { cargarImagen() }
+
+
+    }
+
+    private fun cargarImagen() {
+        selectImageLauncher.launch("image/*")
+    }
+
+    private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if (uri != null) {
+            imageUri = uri
+            //imgPerson.setImageURI(uri)
+        }
     }
 
     companion object {
