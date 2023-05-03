@@ -27,6 +27,15 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_menu_camera" />
 
+        <ImageButton
+            android:id="@+id/btn_reset_list"
+            android:backgroundTint="#ffffff"
+            android:contentDescription="pene"
+            android:textSize="0sp"
+            android:layout_width="40dp"
+            android:layout_height="match_parent" />
+
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

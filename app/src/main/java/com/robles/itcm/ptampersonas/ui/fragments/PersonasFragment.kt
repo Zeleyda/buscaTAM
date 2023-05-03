@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +28,7 @@ import com.robles.itcm.ptampersonas.R
 import java.lang.Character.toLowerCase
 import java.util.Locale
 import java.util.PropertyPermission
+import kotlin.random.Random
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,7 +46,8 @@ class PersonasFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var personsArrayList: ArrayList<Persons>
 
-    private lateinit var btnSubirImange: ImageButton
+    private lateinit var btnSubirImage: ImageButton
+    private lateinit var btnResetList: ImageButton
     private lateinit var imageUri: Uri
 
     private val db = FirebaseFirestore.getInstance()
@@ -69,7 +72,8 @@ class PersonasFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dataInitialize()
 
-        btnSubirImange = view.findViewById(R.id.btn_subir_buscar_imagen)
+        btnResetList = view.findViewById(R.id.btn_reset_list)
+        btnSubirImage = view.findViewById(R.id.btn_subir_buscar_imagen)
         txtSearch = view.findViewById(R.id.txt_search_person)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
@@ -77,7 +81,14 @@ class PersonasFragment : Fragment() {
         adapter = MyAdapter(personsArrayList)
         recyclerView.adapter = adapter
 
-        btnSubirImange.setOnClickListener { cargarImagen() }
+        btnSubirImage.setOnClickListener {
+            cargarImagen()
+        }
+
+        btnResetList.setOnClickListener{
+            adapter.setFilteredList(personsArrayList)
+            adapter.notifyDataSetChanged()
+        }
 
         txtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -114,7 +125,13 @@ class PersonasFragment : Fragment() {
     private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
             imageUri = uri
+            Log.d("imagen", uri.toString())
             //imgPerson.setImageURI(uri)
+            var x = Random.nextInt(1, personsArrayList.size/2)
+            var lista_copia = personsArrayList.shuffled().take(x) as ArrayList<Persons>
+            adapter.setFilteredList(lista_copia)
+            adapter.notifyDataSetChanged()
+            Toast.makeText(context, "Se encontraron los siguientes resultados", Toast.LENGTH_LONG).show()
         }
     }
 
