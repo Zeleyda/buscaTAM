@@ -126,12 +126,13 @@ class PersonasFragment : Fragment() {
         if (uri != null) {
             imageUri = uri
             Log.d("imagen", uri.toString())
-            //imgPerson.setImageURI(uri)
-            var x = Random.nextInt(1, 4)
-            if(!personsArrayList.isEmpty())
+            if(!personsArrayList.isEmpty()) {
+                //imgPerson.setImageURI(uri)
+                var x = Random.nextInt(1, 4)
                 var lista_copia = personsArrayList.shuffled().take(x) as ArrayList<Persons>
-            adapter.setFilteredList(lista_copia)
-            adapter.notifyDataSetChanged()
+                adapter.setFilteredList(lista_copia)
+                adapter.notifyDataSetChanged()
+            }
             Toast.makeText(context, "Se encontraron los siguientes resultados", Toast.LENGTH_LONG).show()
         }
     }
