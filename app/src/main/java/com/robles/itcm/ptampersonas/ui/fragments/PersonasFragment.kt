@@ -158,7 +158,7 @@ class PersonasFragment : Fragment() {
 
     }
     private fun showPersonInfo(position: Int){
-        val x = personsArrayList.get(position)
+        val x = adapter.getList()[position]
         val intent = Intent(context, PersonInfoActivity::class.java)
         intent.putExtra("curp", x.curp)
         startActivity(intent)

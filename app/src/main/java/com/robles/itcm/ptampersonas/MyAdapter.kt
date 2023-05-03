@@ -18,6 +18,11 @@ class MyAdapter(private var personsList: ArrayList<Persons>): RecyclerView.Adapt
     fun setFilteredList(filteredList: ArrayList<Persons>)
     {
         personsList = filteredList
+        notifyDataSetChanged()
+    }
+
+    fun getList(): ArrayList<Persons>{
+        return personsList
     }
 
     fun setOnItemClickListener(listener: onItemClickListener){
