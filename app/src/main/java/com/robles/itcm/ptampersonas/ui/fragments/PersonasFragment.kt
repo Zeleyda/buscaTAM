@@ -126,9 +126,9 @@ class PersonasFragment : Fragment() {
         if (uri != null) {
             imageUri = uri
             Log.d("imagen", uri.toString())
-            if(!personsArrayList.isEmpty()) {
+            var x = Random.nextInt(2, 5)
+            if(x > 1) {
                 //imgPerson.setImageURI(uri)
-                var x = Random.nextInt(1, 4)
                 var lista_copia = personsArrayList.shuffled().take(x) as ArrayList<Persons>
                 adapter.setFilteredList(lista_copia)
                 adapter.notifyDataSetChanged()
