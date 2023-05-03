@@ -74,7 +74,8 @@ class RegisterAcivity : AppCompatActivity() {
                                     db.collection("users").document(email).set(
                                         hashMapOf(
                                             "name" to name,
-                                            "phone" to phone
+                                            "phone" to phone,
+                                            "admin" to false
                                         )
                                     )
                                 }

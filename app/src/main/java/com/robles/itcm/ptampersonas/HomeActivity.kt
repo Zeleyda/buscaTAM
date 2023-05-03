@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -40,31 +41,28 @@ class HomeActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_persons, R.id.nav_addperson, R.id.nav_editperson, R.id.nav_profile,
-                R.id.nav_logout
+                R.id.nav_logout, R.id.nav_admin
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        val adminItemMenu = navView.menu.findItem(R.id.nav_admin);
         val headerView: View = navView.getHeaderView(0)
         val txtName: TextView = headerView.findViewById(R.id.txt_menu_name)
         val txtEmail: TextView = headerView.findViewById(R.id.txt_menu_email)
         val prefs = getSharedPreferences("session_data", Context.MODE_PRIVATE)
-        email = prefs.getString("email", "").toString()
-        name = prefs.getString("name", "").toString()
-
-        if(name.isEmpty()) {
-            FirebaseFirestore.getInstance().collection("users").document(email).get()
-                .addOnSuccessListener {
-                    name = it.get("name").toString()
-                    val editor = prefs.edit()
-                    editor.putString("name", name)
-                    editor.apply()
-                }
-        }
+        email = SessionData.getData("email").toString()
+        name = SessionData.getData("nombre").toString()
 
         txtName.text = name
         txtEmail.text = email
-    }
+
+        if(SessionData.getData("admin") as Boolean)
+            adminItemMenu.isVisible = true
+
+        Toast.makeText(this, "${SessionData.getData("email")} ${SessionData.getData("admin")}", Toast.LENGTH_SHORT).show()
+
+        }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_home)

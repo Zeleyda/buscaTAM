@@ -24,6 +24,7 @@ private lateinit var binding: ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
+    val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,11 +39,16 @@ class LoginActivity : AppCompatActivity() {
 
         val sesion_info = getSharedPreferences("session_data", Context.MODE_PRIVATE)
         val email = sesion_info.getString("email", "").toString()
+        val isAdmin = sesion_info.getBoolean("admin", false)
+        val nombre = sesion_info.getString("nombre", "").toString()
 
         if(email.isNullOrEmpty())
             setup()
         else{
             //cargar ventana principal
+            SessionData.setData("email", email)
+            SessionData.setData("admin", isAdmin)
+            SessionData.setData("nombre", nombre)
             showHome(email)
         }
     }
@@ -71,12 +77,24 @@ class LoginActivity : AppCompatActivity() {
             if (isEmailValid(email) && password.isNotEmpty()) {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if(it.isSuccessful) {
-                        Toast.makeText(this, "Sesión iniciada", Toast.LENGTH_SHORT).show()
-                        val sharedPreferences = getSharedPreferences("session_data", Context.MODE_PRIVATE)
-                        val editor = sharedPreferences.edit()
-                        editor.putString("email", email)
-                        editor.apply()
-                        showHome(email)
+
+                        db.collection("users").document(email).get().addOnCompleteListener {
+                            val isAdmin = it.getResult()?.get("admin") as Boolean
+                            val nombre = it.getResult()?.get("name") as String
+                            Toast.makeText(this, "Sesión iniciada $nombre", Toast.LENGTH_SHORT).show()
+
+                            SessionData.setData("email", email)
+                            SessionData.setData("admin", isAdmin)
+                            SessionData.setData("nombre", nombre)
+                            val sharedPreferences = getSharedPreferences("session_data", Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putString("email", email)
+                            editor.putBoolean("admin", isAdmin)
+                            editor.putString("nombre", nombre)
+                            editor.apply()
+                            showHome(email)
+                        }
+
                     }
                     else{
                         when (it.exception) {

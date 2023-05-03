@@ -25,6 +25,11 @@
     <item android:title="Tu">
         <menu>
             <item
+                android:id="@+id/nav_admin"
+                android:icon="@drawable/user"
+                android:title="Administrar"
+                android:visible="false"/>
+            <item
                 android:id="@+id/nav_profile"
                 android:icon="@drawable/user"
                 android:title="Perfil" />
