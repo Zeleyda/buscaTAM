@@ -3,6 +3,7 @@ package com.robles.itcm.ptampersonas.ui.fragments
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -59,6 +60,8 @@ class AddPersonFragment : Fragment() {
         if (uri != null) {
             imageUri = uri
             imgPerson.setImageURI(uri)
+            val scaledBitmap = getReducedBitmap(uri, 2) // factor de escala 2 para reducir a la mitad
+            imgPerson.setImageBitmap(scaledBitmap)
         }
     }
     // TODO: Rename and change types of parameters
@@ -136,6 +139,12 @@ class AddPersonFragment : Fragment() {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             val data = stream.toByteArray()
 
+            val scaledBitmap = getReducedBitmap(imageUri, 2) // factor de escala 2 para reducir a la mitad
+            val scaledStream = ByteArrayOutputStream()
+            scaledBitmap?.compress(Bitmap.CompressFormat.JPEG, 100, scaledStream)
+            val scaledData = scaledStream.toByteArray()
+
+
             val storage = FirebaseStorage.getInstance()
 
             // Crear referencia a la ubicación en Firebase Storage donde se guardará la imagen
@@ -175,6 +184,32 @@ class AddPersonFragment : Fragment() {
             }
         }
     }
+
+    private fun getReducedBitmap(uri: Uri, scale: Int): Bitmap? {
+        try {
+            val inputStream = requireActivity().contentResolver.openInputStream(uri)
+            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeStream(inputStream, null, options)
+            inputStream?.close()
+
+            val (width, height) = Pair(options.outWidth / scale, options.outHeight / scale)
+            val imageStream = requireActivity().contentResolver.openInputStream(uri)
+            val scaledBitmap = BitmapFactory.decodeStream(imageStream, null,
+                BitmapFactory.Options().apply {
+                    inSampleSize = scale
+                    inJustDecodeBounds = false
+                })
+            imageStream?.close()
+            return scaledBitmap
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+
+
+
 
     private fun showDateTimePicker() {
         val currentDate = Calendar.getInstance()
