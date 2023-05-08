@@ -133,6 +133,7 @@ class AddPersonFragment : Fragment() {
             selectImageLauncher.launch("image/*")
         }
         //Comentario culero
+        //https://www.youtube.com/watch?v=PEzdv38iKdY
         btnGuardarPersona.setOnClickListener{
             val bitmap = (imgPerson.drawable as BitmapDrawable).bitmap
             val stream = ByteArrayOutputStream()
