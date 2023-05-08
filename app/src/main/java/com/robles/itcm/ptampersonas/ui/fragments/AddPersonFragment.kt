@@ -137,7 +137,7 @@ class AddPersonFragment : Fragment() {
         btnGuardarPersona.setOnClickListener{
             val bitmap = (imgPerson.drawable as BitmapDrawable).bitmap
             val stream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
             val data = stream.toByteArray()
 
             val scaledBitmap = getReducedBitmap(imageUri, 2) // factor de escala 2 para reducir a la mitad
@@ -150,7 +150,7 @@ class AddPersonFragment : Fragment() {
 
             // Crear referencia a la ubicación en Firebase Storage donde se guardará la imagen
             val storageRef = storage.reference.child("${txtCurp.text.toString()}.jpg")
-            val uploadTask = storageRef.putBytes(scaledData)
+            val uploadTask = storageRef.putBytes(data)
             uploadTask.addOnSuccessListener {
                 // La imagen se cargó exitosamente
             }.addOnFailureListener {
