@@ -1,5 +1,6 @@
 package com.robles.itcm.ptampersonas.ui.fragments
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Bitmap
@@ -20,10 +21,23 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.robles.itcm.ptampersonas.R
+import com.robles.itcm.ptampersonas.curp
 import com.robles.itcm.ptampersonas.databinding.FragmentAddPersonBinding
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,8 +74,6 @@ class AddPersonFragment : Fragment() {
         if (uri != null) {
             imageUri = uri
             imgPerson.setImageURI(uri)
-            val scaledBitmap = getReducedBitmap(uri, 2) // factor de escala 2 para reducir a la mitad
-            imgPerson.setImageBitmap(scaledBitmap)
         }
     }
     // TODO: Rename and change types of parameters
@@ -137,17 +149,12 @@ class AddPersonFragment : Fragment() {
         btnGuardarPersona.setOnClickListener{
             val bitmap = (imgPerson.drawable as BitmapDrawable).bitmap
             val stream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream)
             val data = stream.toByteArray()
 
-            val scaledBitmap = getReducedBitmap(imageUri, 2) // factor de escala 2 para reducir a la mitad
-            val scaledStream = ByteArrayOutputStream()
-            scaledBitmap?.compress(Bitmap.CompressFormat.JPEG, 100, scaledStream)
-            val scaledData = scaledStream.toByteArray()
 
 
             val storage = FirebaseStorage.getInstance()
-
             // Crear referencia a la ubicación en Firebase Storage donde se guardará la imagen
             val storageRef = storage.reference.child("${txtCurp.text.toString()}.jpg")
             val uploadTask = storageRef.putBytes(data)
@@ -156,6 +163,10 @@ class AddPersonFragment : Fragment() {
             }.addOnFailureListener {
                 // Ocurrió un error al cargar la imagen
             }
+
+
+            sendImageToServer(data, txtCurp.text.toString()     )
+
 
             FirebaseFirestore.getInstance().collection("persons").document(txtCurp.text.toString()).set(
                 hashMapOf(
@@ -186,31 +197,54 @@ class AddPersonFragment : Fragment() {
         }
     }
 
-    private fun getReducedBitmap(uri: Uri, scale: Int): Bitmap? {
-        try {
-            val inputStream = requireActivity().contentResolver.openInputStream(uri)
-            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeStream(inputStream, null, options)
-            inputStream?.close()
+    fun sendImageToServer(byteArray: ByteArray, name: String): Boolean {
+        val builder = AlertDialog.Builder(context)
+        val inflater = LayoutInflater.from(context)
+        builder.setView(inflater.inflate(R.layout.dialog_loading, null))
+        builder.setCancelable(false)
+        val dialog = builder.create()
+        dialog.show()
 
-            val (width, height) = Pair(options.outWidth / scale, options.outHeight / scale)
-            val imageStream = requireActivity().contentResolver.openInputStream(uri)
-            val scaledBitmap = BitmapFactory.decodeStream(imageStream, null,
-                BitmapFactory.Options().apply {
-                    inSampleSize = scale
-                    inJustDecodeBounds = false
-                })
-            imageStream?.close()
-            return scaledBitmap
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
+        var result = false
+        val client = OkHttpClient.Builder()
+            .readTimeout(10 , TimeUnit.SECONDS)
+            .build()
+
+        val requestBody: RequestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart(
+                "image", "image.jpg",
+                byteArray.toRequestBody("image/jpg".toMediaTypeOrNull(), 0, byteArray.size)
+            )
+            .addFormDataPart("name", name)
+            .build()
+
+        val request = Request.Builder()
+            .url("https://elcesarmaat.pythonanywhere.com/save_face_encoding")
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                result = false
+                activity?.runOnUiThread {
+                    dialog.dismiss()
+                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                }
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                activity?.runOnUiThread {
+                    dialog.dismiss()
+                    Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                }
+                result = response.isSuccessful
+            }
+        })
+        return result
+
     }
-
-
-
-
 
     private fun showDateTimePicker() {
         val currentDate = Calendar.getInstance()
