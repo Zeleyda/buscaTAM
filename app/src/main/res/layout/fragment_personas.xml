@@ -20,20 +20,21 @@
 
         <ImageButton
             android:id="@+id/btn_subir_buscar_imagen"
-            android:backgroundTint="#ffffff"
-            android:contentDescription="pene"
-            android:textSize="0sp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_menu_camera" />
+            android:backgroundTint="#ffffff"
+            android:contentDescription="busquedafoto"
+            android:src="@drawable/ic_menu_camera"
+            android:textSize="0sp" />
 
         <ImageButton
             android:id="@+id/btn_reset_list"
-            android:backgroundTint="#ffffff"
-            android:contentDescription="pene"
-            android:textSize="0sp"
             android:layout_width="40dp"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
+            android:contentDescription="refresh"
+            android:src="@drawable/baseline_cached_24"
+            android:textSize="0sp" />
 
 
     </LinearLayout>
