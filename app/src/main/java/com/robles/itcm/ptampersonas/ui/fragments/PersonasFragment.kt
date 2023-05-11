@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.robles.itcm.ptampersonas.MyAdapter
 import com.robles.itcm.ptampersonas.PersonInfoActivity
 import com.robles.itcm.ptampersonas.Persons
@@ -155,14 +157,14 @@ class PersonasFragment : Fragment() {
     private fun searchFace(byteArray: ByteArray): Boolean{
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
-        builder.setView(inflater.inflate(R.layout.dialog_loading, null))
+        builder.setView(inflater.inflate(R.layout.dialog_loading_search, null))
         builder.setCancelable(false)
         val dialog = builder.create()
         dialog.show()
 
         var result = false
         val client = OkHttpClient.Builder()
-            .readTimeout(10 , TimeUnit.SECONDS)
+            .readTimeout(15 , TimeUnit.SECONDS)
             .build()
 
         val requestBody: RequestBody = MultipartBody.Builder()
@@ -188,11 +190,21 @@ class PersonasFragment : Fragment() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                activity?.runOnUiThread {
-                    dialog.dismiss()
-
-                    Toast.makeText(context, response.body?.string(), Toast.LENGTH_SHORT).show()
+                if(response.isSuccessful) {
+                    val resultados = response.body?.string()?.split(",") as List<String>
+                    val filteredList = personsArrayList.filter { it.curp in resultados }
+                    activity?.runOnUiThread {
+                        adapter.setFilteredList(filteredList as ArrayList<Persons>)
+                        adapter.notifyDataSetChanged()
+                        dialog.dismiss()
+                        if(filteredList.isEmpty())
+                            Toast.makeText(context, "No se encontraron resultados", Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(context, "Se encontraron los siguientes resultados", Toast.LENGTH_LONG).show()
+                    }
                 }
+                else
+                    dialog.dismiss()
                 result = response.isSuccessful
             }
         })
