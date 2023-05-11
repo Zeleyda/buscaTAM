@@ -1,9 +1,11 @@
 package com.robles.itcm.ptampersonas.ui.fragments
 
+import android.app.AlertDialog
 import android.app.Person
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
@@ -25,9 +28,21 @@ import com.robles.itcm.ptampersonas.MyAdapter
 import com.robles.itcm.ptampersonas.PersonInfoActivity
 import com.robles.itcm.ptampersonas.Persons
 import com.robles.itcm.ptampersonas.R
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.lang.Character.toLowerCase
 import java.util.Locale
 import java.util.PropertyPermission
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 // TODO: Rename parameter arguments, choose names that match
@@ -49,6 +64,7 @@ class PersonasFragment : Fragment() {
     private lateinit var btnSubirImage: ImageButton
     private lateinit var btnResetList: ImageButton
     private lateinit var imageUri: Uri
+    private lateinit var imgSearch: ImageView
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -72,6 +88,8 @@ class PersonasFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dataInitialize()
 
+
+        imgSearch = view.findViewById(R.id.img_search)
         btnResetList = view.findViewById(R.id.btn_reset_list)
         btnSubirImage = view.findViewById(R.id.btn_subir_buscar_imagen)
         txtSearch = view.findViewById(R.id.txt_search_person)
@@ -86,8 +104,7 @@ class PersonasFragment : Fragment() {
         }
 
         btnResetList.setOnClickListener{
-            adapter.setFilteredList(personsArrayList)
-            adapter.notifyDataSetChanged()
+            dataInitialize()
         }
 
         txtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -124,30 +141,64 @@ class PersonasFragment : Fragment() {
 
     private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
-            imageUri = uri
-            Log.d("imagen", uri.toString())
-            var x = Random.nextInt(2, 5)
-            if(x > 1) {
-                //imgPerson.setImageURI(uri)
-                var lista_copia = personsArrayList.shuffled().take(x) as ArrayList<Persons>
-                adapter.setFilteredList(lista_copia)
-                adapter.notifyDataSetChanged()
-            }
-            Toast.makeText(context, "Se encontraron los siguientes resultados", Toast.LENGTH_LONG).show()
+            imgSearch.setImageURI(uri)
+            imgSearch.visibility=View.GONE
+            val bitmap = (imgSearch.drawable as BitmapDrawable).bitmap
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream)
+            val data = stream.toByteArray()
+            searchFace(data)
+
         }
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PersonasFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+    private fun searchFace(byteArray: ByteArray): Boolean{
+        val builder = AlertDialog.Builder(context)
+        val inflater = LayoutInflater.from(context)
+        builder.setView(inflater.inflate(R.layout.dialog_loading, null))
+        builder.setCancelable(false)
+        val dialog = builder.create()
+        dialog.show()
 
+        var result = false
+        val client = OkHttpClient.Builder()
+            .readTimeout(10 , TimeUnit.SECONDS)
+            .build()
+
+        val requestBody: RequestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart(
+                "image", "image.jpg",
+                byteArray.toRequestBody("image/jpg".toMediaTypeOrNull(), 0, byteArray.size)
+            ).build()
+
+        val request = Request.Builder()
+            .url("https://elcesarmaat.pythonanywhere.com/face_recognition")
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                result = false
+                activity?.runOnUiThread {
+                    dialog.dismiss()
+                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                }
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                activity?.runOnUiThread {
+                    dialog.dismiss()
+
+                    Toast.makeText(context, response.body?.string(), Toast.LENGTH_SHORT).show()
+                }
+                result = response.isSuccessful
+            }
+        })
+        return result
+
+    }
     private fun dataInitialize(){
         personsArrayList = arrayListOf<Persons>()
         val collectionRef = db.collection("persons")

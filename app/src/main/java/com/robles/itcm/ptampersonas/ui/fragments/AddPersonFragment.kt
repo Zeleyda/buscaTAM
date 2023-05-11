@@ -123,17 +123,7 @@ class AddPersonFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    companion object {
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddPersonFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
 
     private fun setup(){
         txtDateTime.setOnFocusChangeListener { view, b ->
@@ -164,9 +154,7 @@ class AddPersonFragment : Fragment() {
                 // Ocurrió un error al cargar la imagen
             }
 
-
-            sendImageToServer(data, txtCurp.text.toString()     )
-
+            sendImageToServer(data, txtCurp.text.toString())
 
             FirebaseFirestore.getInstance().collection("persons").document(txtCurp.text.toString()).set(
                 hashMapOf(
@@ -190,7 +178,6 @@ class AddPersonFragment : Fragment() {
                 )
             ).addOnCompleteListener {
                 if(it.isSuccessful){
-                    Toast.makeText(context, "Persona agregada con exito", Toast.LENGTH_SHORT).show()
                     btnGuardarPersona.isEnabled = false
                 }
             }
@@ -237,7 +224,7 @@ class AddPersonFragment : Fragment() {
             override fun onResponse(call: Call, response: Response) {
                 activity?.runOnUiThread {
                     dialog.dismiss()
-                    Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Persona agregada con exito", Toast.LENGTH_SHORT).show()
                 }
                 result = response.isSuccessful
             }
