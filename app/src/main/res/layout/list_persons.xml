@@ -9,9 +9,9 @@
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/linear_main_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:gravity="center"
         android:background="#CBFF7FD2"
         android:orientation="horizontal"
@@ -31,6 +31,7 @@
             android:id="@+id/img_list_personimage"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:scaleType="centerCrop"
             android:src="@mipmap/ic_launcher" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>

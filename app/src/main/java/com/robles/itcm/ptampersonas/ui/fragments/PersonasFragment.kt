@@ -47,21 +47,12 @@ import java.util.PropertyPermission
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-
-
 class PersonasFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     private lateinit var txtSearch: SearchView
     private lateinit var adapter: MyAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var personsArrayList: ArrayList<Persons>
+    private val personsArrayList = arrayListOf<Persons>()
 
     private lateinit var btnSubirImage: ImageButton
     private lateinit var btnResetList: ImageButton
@@ -69,14 +60,6 @@ class PersonasFragment : Fragment() {
     private lateinit var imgSearch: ImageView
 
     private val db = FirebaseFirestore.getInstance()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,18 +71,19 @@ class PersonasFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dataInitialize()
-
 
         imgSearch = view.findViewById(R.id.img_search)
         btnResetList = view.findViewById(R.id.btn_reset_list)
         btnSubirImage = view.findViewById(R.id.btn_subir_buscar_imagen)
         txtSearch = view.findViewById(R.id.txt_search_person)
+
+        adapter = MyAdapter(personsArrayList)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = GridLayoutManager(context, 1)
-        adapter = MyAdapter(personsArrayList)
         recyclerView.adapter = adapter
+
+        dataInitialize()
 
         btnSubirImage.setOnClickListener {
             cargarImagen()
@@ -109,6 +93,9 @@ class PersonasFragment : Fragment() {
             dataInitialize()
         }
 
+        adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
+            override fun onItemClick(position: Int) { showPersonInfo(position) }
+        })
         txtSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
@@ -150,7 +137,6 @@ class PersonasFragment : Fragment() {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream)
             val data = stream.toByteArray()
             searchFace(data)
-
         }
     }
 
@@ -212,26 +198,32 @@ class PersonasFragment : Fragment() {
 
     }
     private fun dataInitialize(){
-        personsArrayList = arrayListOf<Persons>()
-        val collectionRef = db.collection("persons")
+        personsArrayList.clear()
+        adapter.setFilteredList(personsArrayList)
+        btnResetList.isEnabled = false
+        adapter.notifyDataSetChanged()
+        val collectionRef = db.collection("persons").whereEqualTo("enabled", true)
         collectionRef.get().addOnSuccessListener {
+            var cont = 0
+            val size = it.documents.size
             for(document in it.documents){
                 Log.d(document.id, document.data?.get("name").toString())
+                val enabled = document.data?.get("enabled") as Boolean
                 var imagen: Bitmap? = null
                 val curp = document.data?.get("curp").toString()
                 val name = document.data?.get("name").toString()
                 val lugar = document.data?.get("lugar_desaparicion").toString()
-                val enabled = document.data?.get("enabled") as Boolean
                 FirebaseStorage.getInstance().reference.child("$curp.jpg").getBytes(Long.MAX_VALUE).addOnSuccessListener {bytes ->
                     // Convertir bytes a Bitmap y mostrar en el ImageView
                     imagen = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    imagen = Bitmap.createScaledBitmap(imagen!!, imagen!!.width/5, imagen!!.height/5, true)
                 }.addOnSuccessListener {
                     personsArrayList.add(Persons(name, lugar, imagen!!, curp, enabled))
-                    adapter = MyAdapter(personsArrayList)
-                    recyclerView.adapter = adapter
-                    adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
-                        override fun onItemClick(position: Int) { showPersonInfo(position) }
-                    })
+                    adapter.notifyDataSetChanged()
+                    cont++
+                    Log.d("contador", cont.toString())
+                    if(cont == size)
+                        btnResetList.isEnabled = true
                 }
             }
         }.addOnFailureListener {
