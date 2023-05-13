@@ -12,7 +12,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.button.MaterialButton
@@ -64,9 +66,11 @@ class AddPersonFragment : Fragment() {
     private lateinit var txtDateTime: TextInputEditText
     private lateinit var txtCircunstancia: TextInputEditText
     private lateinit var txtDescripcion: TextInputEditText
+    private lateinit var txtEdicto: TextInputEditText
     private lateinit var imgPerson: ImageView
     private lateinit var btnCargarImagen: MaterialButton
     private lateinit var btnGuardarPersona: MaterialButton
+    private lateinit var spinner: Spinner
 
     private lateinit var imageUri: Uri
 
@@ -113,9 +117,12 @@ class AddPersonFragment : Fragment() {
 
         txtCircunstancia = view.findViewById(R.id.txt_add_circumstance)
         txtDescripcion = view.findViewById(R.id.txt_add_description)
+        txtEdicto = view.findViewById(R.id.txt_add_edicto)
 
         btnCargarImagen = view.findViewById(R.id.btn_add_image)
         imgPerson = view.findViewById(R.id.img_add_img_person)
+
+        spinner = view.findViewById(R.id.spinner_dependencia)
 
         btnGuardarPersona = view.findViewById(R.id.btn_add_save_person)
 
@@ -126,6 +133,12 @@ class AddPersonFragment : Fragment() {
 
 
     private fun setup(){
+
+        val situaciones = arrayOf("Fiscalia general de justicia del estado de Tamaulipas", "Comision nacional de busqueda de personas")
+        val adapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_item, situaciones)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
         txtDateTime.setOnFocusChangeListener { view, b ->
             if(view.isFocused)
                 showDateTimePicker()
@@ -173,7 +186,9 @@ class AddPersonFragment : Fragment() {
                     "lugar_desaparicion" to txtLugarDesaparicion.text.toString(),
                     "circunstancia" to txtCircunstancia.text.toString(),
                     "descripcion" to txtDescripcion.text.toString(),
+                    "edicto" to txtEdicto.text.toString(),
                     "image" to "${txtCurp.text.toString()}.jpg",
+                    "dependencia" to spinner.selectedItem.toString(),
                     "enabled" to false
                 )
             ).addOnCompleteListener {
