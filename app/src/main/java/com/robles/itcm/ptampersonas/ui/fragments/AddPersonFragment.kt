@@ -6,6 +6,7 @@ import android.app.TimePickerDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -50,6 +52,8 @@ private const val ARG_PARAM2 = "param2"
 
 
 class AddPersonFragment : Fragment() {
+    private lateinit var toolbar: Toolbar
+    private lateinit var currentBackground: Drawable
     private lateinit var txtName: TextInputEditText
     private lateinit var txtCurp: TextInputEditText
     private lateinit var txtEstadoCivil: TextInputEditText
@@ -101,6 +105,9 @@ class AddPersonFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        currentBackground = toolbar.background
+        toolbar.setBackgroundResource(R.drawable.banner6)
         txtName = view.findViewById(R.id.txt_add_name)
         txtCurp = view.findViewById(R.id.txt_add_curp)
         txtEstadoCivil = view.findViewById(R.id.txt_add_estadoCivil)
@@ -246,6 +253,11 @@ class AddPersonFragment : Fragment() {
         })
         return result
 
+    }
+    override fun onDestroyView() {
+        val activityToolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        activityToolbar.background = currentBackground
+        super.onDestroyView()
     }
 
     private fun showDateTimePicker() {

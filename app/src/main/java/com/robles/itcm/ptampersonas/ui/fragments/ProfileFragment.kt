@@ -1,6 +1,7 @@
 package com.robles.itcm.ptampersonas.ui.fragments
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import android.widget.Toolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.robles.itcm.ptampersonas.R
 
 class ProfileFragment : Fragment() {
+    lateinit var toolbar: Toolbar
+  lateinit var currentBackground: Drawable
     lateinit var name: String
     lateinit var phone: String
     lateinit var email: String
@@ -56,7 +60,15 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        currentBackground = toolbar.background
+        toolbar.setBackgroundResource(R.drawable.banner8)
         super.onViewCreated(view, savedInstanceState)
     }
 
+    override fun onDestroyView() {
+        val activityToolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        activityToolbar.background = currentBackground
+        super.onDestroyView()
+    }
 }

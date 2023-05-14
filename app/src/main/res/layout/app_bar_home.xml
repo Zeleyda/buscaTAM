@@ -7,6 +7,7 @@
     tools:context=".HomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.PTamPersonas.AppBarOverlay">
@@ -14,8 +15,8 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#E465FB"
+            android:layout_height="60dp"
+            android:background="@drawable/banner4"
             app:popupTheme="@style/Theme.PTamPersonas.PopupOverlay"
 
             />

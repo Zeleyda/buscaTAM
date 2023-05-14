@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -48,7 +49,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class PersonasFragment : Fragment() {
-
+    private lateinit var toolbar: Toolbar
     private lateinit var txtSearch: SearchView
     private lateinit var adapter: MyAdapter
     private lateinit var recyclerView: RecyclerView
@@ -70,6 +71,8 @@ class PersonasFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
         super.onViewCreated(view, savedInstanceState)
 
         imgSearch = view.findViewById(R.id.img_search)

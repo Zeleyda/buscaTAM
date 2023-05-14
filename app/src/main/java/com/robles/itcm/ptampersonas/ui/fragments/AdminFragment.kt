@@ -4,6 +4,7 @@ import android.app.Person
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,6 +29,8 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class AdminFragment : Fragment() {
+    private lateinit var toolbar: Toolbar
+    private lateinit var currentBackground: Drawable
     private lateinit var listPersons: RecyclerView
     private val personsArrayList = arrayListOf<Persons>()
     private val adapter = MyAdapter(personsArrayList)
@@ -38,6 +42,9 @@ class AdminFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        currentBackground = toolbar.background
+        toolbar.setBackgroundResource(R.drawable.banner7)
         super.onViewCreated(view, savedInstanceState)
         listPersons = view.findViewById(R.id.persons_list_admin)
         listPersons.adapter = adapter
@@ -52,6 +59,13 @@ class AdminFragment : Fragment() {
         })
         dataInitialize()
     }
+
+    override fun onDestroyView() {
+        val activityToolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        activityToolbar.background = currentBackground
+        super.onDestroyView()
+    }
+
     private fun dataInitialize(){
         val collectionRef = db.collection("persons")
         collectionRef.orderBy("enabled").get().addOnSuccessListener {
