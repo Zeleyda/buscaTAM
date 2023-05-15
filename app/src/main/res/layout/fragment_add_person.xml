@@ -490,17 +490,23 @@
 
 
             <TextView
+                android:layout_width="358dp"
+                android:layout_height="62dp"
                 android:layout_margin="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dependencia del gobierno"
+                android:background="@drawable/banner_transparecia1"
+                android:rotation="0"
+                android:rotationX="0"
+                android:text="Dependencia a la que se le envio la información"
+                android:textAlignment="center"
                 android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <Spinner
-                android:backgroundTint="#ffffff"
                 android:id="@+id/spinner_dependencia"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:layout_height="63dp"
+                android:background="@drawable/dependencia_gob"
+                android:backgroundTint="#ffffff" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_image"
