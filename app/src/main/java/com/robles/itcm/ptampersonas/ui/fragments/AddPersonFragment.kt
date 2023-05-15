@@ -100,14 +100,15 @@ class AddPersonFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_person, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val view = inflater.inflate(R.layout.fragment_edit_person, container, false)
         val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         currentBackground = toolbar.background
         toolbar.setBackgroundResource(R.drawable.banner6)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         txtName = view.findViewById(R.id.txt_add_name)
         txtCurp = view.findViewById(R.id.txt_add_curp)
         txtEstadoCivil = view.findViewById(R.id.txt_add_estadoCivil)
@@ -154,8 +155,7 @@ class AddPersonFragment : Fragment() {
         btnCargarImagen.setOnClickListener{
             selectImageLauncher.launch("image/*")
         }
-        //Comentario culero
-        //https://www.youtube.com/watch?v=PEzdv38iKdY
+
         btnGuardarPersona.setOnClickListener{
             val bitmap = (imgPerson.drawable as BitmapDrawable).bitmap
             val stream = ByteArrayOutputStream()

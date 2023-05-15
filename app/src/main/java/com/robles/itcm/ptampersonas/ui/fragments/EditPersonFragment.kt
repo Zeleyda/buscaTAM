@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import com.robles.itcm.ptampersonas.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,18 +42,16 @@ class EditPersonFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_person, container, false)
+        val view = inflater.inflate(R.layout.fragment_edit_person, container, false)
+        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        currentBackground = toolbar.background
+        toolbar.setBackgroundResource(R.drawable.banner3)
+        return view
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
-        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        currentBackground = toolbar.background
-        toolbar.setBackgroundResource(R.drawable.banner3)
         org1 = view.findViewById(R.id.img_org1)
         org2 = view.findViewById(R.id.img_org2)
         org3 = view.findViewById(R.id.img_org3)
@@ -98,8 +96,7 @@ class EditPersonFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        val activityToolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        activityToolbar.background = currentBackground
         super.onDestroyView()
+        toolbar.background = currentBackground
     }
 }
