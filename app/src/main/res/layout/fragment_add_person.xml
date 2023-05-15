@@ -516,9 +516,6 @@
                 android:layout_marginBottom="10dp"
                 android:text="Cargar imagen"/>
 
-
-
-
             <ImageView
                 android:id="@+id/img_add_img_person"
                 android:layout_width="150dp"
