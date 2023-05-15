@@ -43,6 +43,8 @@ class PersonInfoActivity : AppCompatActivity() {
                 b.txtInfoLugarDesaparicion.setText(it.result.data?.get("lugar_desaparicion").toString())
                 b.txtInfoCircumstance.setText(it.result.data?.get("circunstancia").toString())
                 b.txtInfoDescription.setText(it.result.data?.get("descripcion").toString())
+                b.txtInfoEdicto.setText(it.result.data?.get("edicto").toString())
+                b.txtInfoDependencia.setText(it.result.data?.get("dependencia").toString())
             }
         }
 

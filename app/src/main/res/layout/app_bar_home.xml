@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@drawable/banner4"
+            android:background="@drawable/banner_registros"
             app:popupTheme="@style/Theme.PTamPersonas.PopupOverlay"
 
             />

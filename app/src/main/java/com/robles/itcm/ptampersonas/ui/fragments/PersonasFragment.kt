@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,7 +50,6 @@ import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class PersonasFragment : Fragment() {
-    private lateinit var toolbar: Toolbar
     private lateinit var txtSearch: SearchView
     private lateinit var adapter: MyAdapter
     private lateinit var recyclerView: RecyclerView
@@ -57,7 +57,6 @@ class PersonasFragment : Fragment() {
 
     private lateinit var btnSubirImage: ImageButton
     private lateinit var btnResetList: ImageButton
-    private lateinit var imageUri: Uri
     private lateinit var imgSearch: ImageView
 
     private val db = FirebaseFirestore.getInstance()
@@ -71,8 +70,6 @@ class PersonasFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-
         super.onViewCreated(view, savedInstanceState)
 
         imgSearch = view.findViewById(R.id.img_search)
@@ -240,5 +237,11 @@ class PersonasFragment : Fragment() {
         intent.putExtra("curp", x.curp)
         startActivity(intent)
         Log.d("persona", x.toString())
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val toolbar = (activity as AppCompatActivity).findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar.setBackgroundResource(R.drawable.banner_registros)
     }
 }

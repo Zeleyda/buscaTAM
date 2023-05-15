@@ -10,13 +10,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.robles.itcm.ptampersonas.R
 
 class ProfileFragment : Fragment() {
-    lateinit var toolbar: Toolbar
-  lateinit var currentBackground: Drawable
     lateinit var name: String
     lateinit var phone: String
     lateinit var email: String
@@ -60,15 +59,9 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        currentBackground = toolbar.background
-        toolbar.setBackgroundResource(R.drawable.banner8)
+        val toolbar = (activity as AppCompatActivity).findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar.setBackgroundResource(R.drawable.banner_perfil)
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onDestroyView() {
-        val activityToolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        activityToolbar.background = currentBackground
-        super.onDestroyView()
-    }
 }

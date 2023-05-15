@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -19,17 +18,14 @@ import android.widget.Spinner
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.robles.itcm.ptampersonas.R
-import com.robles.itcm.ptampersonas.curp
-import com.robles.itcm.ptampersonas.databinding.FragmentAddPersonBinding
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -52,7 +48,6 @@ private const val ARG_PARAM2 = "param2"
 
 
 class AddPersonFragment : Fragment() {
-    private lateinit var toolbar: Toolbar
     private lateinit var currentBackground: Drawable
     private lateinit var txtName: TextInputEditText
     private lateinit var txtCurp: TextInputEditText
@@ -76,6 +71,7 @@ class AddPersonFragment : Fragment() {
     private lateinit var btnGuardarPersona: MaterialButton
     private lateinit var spinner: Spinner
 
+    private lateinit var toolbar: Toolbar
     private lateinit var imageUri: Uri
 
     private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -100,15 +96,14 @@ class AddPersonFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_edit_person, container, false)
-        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        currentBackground = toolbar.background
-        toolbar.setBackgroundResource(R.drawable.banner6)
+        val view = inflater.inflate(R.layout.fragment_add_person, container, false)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        val toolbar = (activity as AppCompatActivity).findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar.setBackgroundResource(R.drawable.banner_registrar)
         txtName = view.findViewById(R.id.txt_add_name)
         txtCurp = view.findViewById(R.id.txt_add_curp)
         txtEstadoCivil = view.findViewById(R.id.txt_add_estadoCivil)
@@ -194,8 +189,8 @@ class AddPersonFragment : Fragment() {
                     "circunstancia" to txtCircunstancia.text.toString(),
                     "descripcion" to txtDescripcion.text.toString(),
                     "edicto" to txtEdicto.text.toString(),
-                    "image" to "${txtCurp.text.toString()}.jpg",
                     "dependencia" to spinner.selectedItem.toString(),
+                    "image" to "${txtCurp.text.toString()}.jpg",
                     "enabled" to false
                 )
             ).addOnCompleteListener {
@@ -254,11 +249,6 @@ class AddPersonFragment : Fragment() {
         return result
 
     }
-    override fun onDestroyView() {
-        val activityToolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        activityToolbar.background = currentBackground
-        super.onDestroyView()
-    }
 
     private fun showDateTimePicker() {
         val currentDate = Calendar.getInstance()
@@ -278,6 +268,5 @@ class AddPersonFragment : Fragment() {
         }, year, month, day)
         datePickerDialog.show()
     }
-
-
 }
+

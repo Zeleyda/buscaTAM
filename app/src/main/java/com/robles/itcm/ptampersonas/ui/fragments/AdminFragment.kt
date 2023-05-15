@@ -1,6 +1,5 @@
 package com.robles.itcm.ptampersonas.ui.fragments
 
-import android.app.Person
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -11,9 +10,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +28,6 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class AdminFragment : Fragment() {
-    private lateinit var toolbar: Toolbar
     private lateinit var currentBackground: Drawable
     private lateinit var listPersons: RecyclerView
     private val personsArrayList = arrayListOf<Persons>()
@@ -40,16 +38,15 @@ class AdminFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_edit_person, container, false)
-        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        currentBackground = toolbar.background
-        toolbar.setBackgroundResource(R.drawable.banner7)
+        val view = inflater.inflate(R.layout.fragment_admin, container, false)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
+        val toolbar = (activity as AppCompatActivity).findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar.setBackgroundResource(R.drawable.banner_admin)
         listPersons = view.findViewById(R.id.persons_list_admin)
         listPersons.adapter = adapter
         listPersons.layoutManager = LinearLayoutManager(context)
@@ -62,12 +59,6 @@ class AdminFragment : Fragment() {
             }
         })
         dataInitialize()
-    }
-
-    override fun onDestroyView() {
-        val activityToolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        activityToolbar.background = currentBackground
-        super.onDestroyView()
     }
 
     private fun dataInitialize(){

@@ -492,7 +492,58 @@
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginTop="20dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Edicto"
+                app:boxBackgroundColor="#ffffff"
+                app:errorTextColor="#FFFFFF"
+                app:boxStrokeErrorColor="#950808"
+                app:boxCornerRadiusBottomEnd="25dp"
+                app:boxCornerRadiusBottomStart="25dp"
+                app:boxCornerRadiusTopEnd="25dp"
+                app:boxCornerRadiusTopStart="25dp"
+                app:boxStrokeColor="#ff68ca"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_info_edicto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:inputType="text"
+                    android:textSize="15sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginTop="20dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Dependencia gubernamental"
+                app:boxBackgroundColor="#ffffff"
+                app:errorTextColor="#FFFFFF"
+                app:boxStrokeErrorColor="#950808"
+                app:boxCornerRadiusBottomEnd="25dp"
+                app:boxCornerRadiusBottomStart="25dp"
+                app:boxCornerRadiusTopEnd="25dp"
+                app:boxCornerRadiusTopStart="25dp"
+                app:boxStrokeColor="#ff68ca"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                android:layout_marginBottom="20dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_info_dependencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:inputType="text"
+                    android:textSize="15sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
