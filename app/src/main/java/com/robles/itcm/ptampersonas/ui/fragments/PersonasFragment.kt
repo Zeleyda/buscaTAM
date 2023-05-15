@@ -1,7 +1,6 @@
 package com.robles.itcm.ptampersonas.ui.fragments
 
 import android.app.AlertDialog
-import android.app.Person
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -13,21 +12,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.robles.itcm.ptampersonas.MyAdapter
 import com.robles.itcm.ptampersonas.PersonInfoActivity
 import com.robles.itcm.ptampersonas.Persons
@@ -43,11 +37,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.lang.Character.toLowerCase
-import java.util.Locale
-import java.util.PropertyPermission
 import java.util.concurrent.TimeUnit
-import kotlin.random.Random
 
 class PersonasFragment : Fragment() {
     private lateinit var txtSearch: SearchView

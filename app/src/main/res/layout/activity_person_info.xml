@@ -18,6 +18,7 @@
             android:orientation="vertical">
 
 
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,6 +42,27 @@
                 android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher"/>
             </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btn_avistamientos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver avistamientos"
+                android:textSize="15sp"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                />
+
+            <Button
+                android:id="@+id/btn_nuevo_avistamiento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reportar avistamiento"
+                android:textSize="15sp"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                />
+
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"

@@ -1,5 +1,6 @@
 package com.robles.itcm.ptampersonas
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,9 +13,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.robles.itcm.ptampersonas.databinding.ActivityPersonInfoBinding
 
-lateinit var curp: String
 class PersonInfoActivity : AppCompatActivity() {
 
+    lateinit var curp: String
     var tam = false
     private lateinit var b: ActivityPersonInfoBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +65,19 @@ class PersonInfoActivity : AppCompatActivity() {
                 tam = false
             }
         }
+
+        b.btnAvistamientos.setOnClickListener {
+            val i = Intent(this, ListaAvistamientosActivity::class.java)
+            i.putExtra("curp", curp)
+            startActivity(i)
+        }
+
+        b.btnNuevoAvistamiento.setOnClickListener {
+            val i = Intent(this, NuevoAvistamientoActivity::class.java)
+            i.putExtra("curp", curp)
+            startActivity(i)
+        }
+
     }
     private fun dpToPx(dp: Int): Int {
         return TypedValue.applyDimension(

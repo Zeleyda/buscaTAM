@@ -48,7 +48,6 @@ private const val ARG_PARAM2 = "param2"
 
 
 class AddPersonFragment : Fragment() {
-    private lateinit var currentBackground: Drawable
     private lateinit var txtName: TextInputEditText
     private lateinit var txtCurp: TextInputEditText
     private lateinit var txtEstadoCivil: TextInputEditText
