@@ -24,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.robles.itcm.ptampersonas.R
+import com.robles.itcm.ptampersonas.SessionData
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -190,7 +191,8 @@ class AddPersonFragment : Fragment() {
                     "edicto" to txtEdicto.text.toString(),
                     "dependencia" to spinner.selectedItem.toString(),
                     "image" to "${txtCurp.text.toString()}.jpg",
-                    "enabled" to false
+                    "enabled" to false,
+                    "user_ref" to SessionData.getData("mail")
                 )
             ).addOnCompleteListener {
                 if(it.isSuccessful){
