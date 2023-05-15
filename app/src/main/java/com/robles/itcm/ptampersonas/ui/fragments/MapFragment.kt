@@ -18,12 +18,12 @@ import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.firestore.GeoPoint
 import com.robles.itcm.ptampersonas.R
 import com.robles.itcm.ptampersonas.SessionData
 
 class MapFragment : Fragment() {
     private var mCircle: Circle? = null
-    private lateinit var btnGuardar: Button
     var lat = -1.0
     var lon = -1.0
     private val callback = OnMapReadyCallback { googleMap ->
@@ -34,15 +34,16 @@ class MapFragment : Fragment() {
 
         googleMap.setOnMapClickListener { latLng ->
             mCircle?.remove()
-
             val circleOptions = CircleOptions()
                 .center(latLng)
                 .radius(1000.0) // radio en metros
                 .strokeColor(Color.RED) // color del borde
                 .fillColor(0x220000FF) // color de relleno
             mCircle = googleMap.addCircle(circleOptions)
+            SessionData.setData("latlon", GeoPoint(latLng.latitude, latLng.longitude))
             SessionData.setData("lat", latLng.latitude)
             SessionData.setData("lon", latLng.longitude)
+            SessionData.setData("zoom", googleMap.cameraPosition.zoom)
         }
     }
 

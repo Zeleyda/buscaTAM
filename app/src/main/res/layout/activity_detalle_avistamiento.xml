@@ -9,10 +9,10 @@
     tools:context=".NuevoAvistamientoActivity">
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/scrollView_avistamiento"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_map"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/mapView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,14 +27,8 @@
                 android:id="@+id/img_nuevo_avistamiento"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:layout_marginBottom="15dp"
                 android:src="@mipmap/ic_launcher" />
-
-            <Button
-                android:id="@+id/btn_add_image_nuevo_avistamiento"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Seleccionar imagen" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
@@ -56,11 +50,12 @@
                 app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_nuevo_avistamiento_titulo"
+                    android:id="@+id/txt_detalle_avistamiento_titulo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
                     android:maxLength="50"
-                    android:inputType="text"
+                    android:focusable="false"
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,15 +76,15 @@
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconMode="clear_text"
                 app:errorTextColor="#FFFFFF"
-                app:helperText="Una breve descripción"
                 app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_nuevo_avistamiento_descripcion"
+                    android:id="@+id/txt_detalle_avistamiento_descripcion"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:inputType="text"
+                    android:imeOptions="actionNext"
                     android:maxLength="120"
+                    android:focusable="false"
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,44 +108,27 @@
                 app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_fecha_nuevo_avistamiento_hora"
+                    android:id="@+id/txt_detalle_avistamiento_fecha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:imeOptions="actionNext"
                     android:maxLength="50"
+                    android:focusable="false"
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Seleccione una zona en el mapa"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-
-            <Button
-                android:id="@+id/btn_guardar_avistamiento"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:text="Guardar" />
 
         </LinearLayout>
     </ScrollView>
 
-    <fragment
-        android:id="@+id/fragment_map"
-        android:name="com.robles.itcm.ptampersonas.ui.fragments.MapFragment"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"
+        app:layout_constraintTop_toBottomOf="@id/scrollView_avistamiento"
         android:layout_margin="5dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

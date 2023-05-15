@@ -1,18 +1,20 @@
 package com.robles.itcm.ptampersonas
 
+import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.robles.itcm.ptampersonas.databinding.ActivityListaAvistamientosBinding
 
 class ListaAvistamientosActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
     lateinit var b: ActivityListaAvistamientosBinding
-    val arrayList = arrayListOf<Persons>()
-    val adapter = MyAdapter(arrayList)
+    val arrayList = arrayListOf<Avistamientos>()
+    val adapter = AdaptadorAvistamientos(arrayList)
 
     lateinit var curp: String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,17 +28,31 @@ class ListaAvistamientosActivity : AppCompatActivity() {
         b.recyclerViewAvistamientos.layoutManager = GridLayoutManager(this, 1)
         b.recyclerViewAvistamientos.setHasFixedSize(true)
 
-        adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
-            override fun onItemClick(position: Int) { }
+        adapter.setOnItemClickListener(object : AdaptadorAvistamientos.onItemClickListener{
+            override fun onItemClick(position: Int) {
+                mostrarAvistamiento(position)
+            }
         })
+
 
         db.collection("persons").document(curp).collection("avistamientos").get().addOnCompleteListener {
             for(ds in it.result){
+                val id = ds.id
+                val titulo = ds.data["titulo"].toString()
                 val desc = ds.data["descripcion"].toString()
-                val latlon = "${ds.data["lat"]}, ${ds.data["lon"]}"
-                arrayList.add(Persons(desc, latlon, Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888), desc, true))
+                val fecha = ds.data["fecha"].toString()
+                val latlon = ds.data["latlon"] as GeoPoint?
+                val zoom = ds.data["zoom"] as Double?
+                arrayList.add(Avistamientos(id, titulo, desc, fecha, latlon, zoom))
                 adapter.notifyDataSetChanged()
             }
         }
+    }
+
+    fun mostrarAvistamiento(position: Int){
+        val i = Intent(this, DetalleAvistamientoActivity::class.java)
+        i.putExtra("id", adapter.getList()[position].id)
+        i.putExtra("curp", curp)
+        startActivity(i)
     }
 }

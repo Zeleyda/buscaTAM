@@ -159,7 +159,6 @@ class AddPersonFragment : Fragment() {
 
 
             val storage = FirebaseStorage.getInstance()
-            // Crear referencia a la ubicación en Firebase Storage donde se guardará la imagen
             val storageRef = storage.reference.child("${txtCurp.text.toString()}.jpg")
             val uploadTask = storageRef.putBytes(data)
             uploadTask.addOnSuccessListener {

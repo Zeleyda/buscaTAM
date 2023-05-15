@@ -133,7 +133,7 @@ class PersonasFragment : Fragment() {
     private fun searchFace(byteArray: ByteArray): Boolean{
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
-        builder.setView(inflater.inflate(R.layout.dialog_loading_search, null))
+        builder.setView(inflater.inflate(R.layout.dialog_save_avistamiento, null))
         builder.setCancelable(false)
         val dialog = builder.create()
         dialog.show()
