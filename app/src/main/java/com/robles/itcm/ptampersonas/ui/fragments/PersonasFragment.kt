@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +49,7 @@ class PersonasFragment : Fragment() {
     private lateinit var btnSubirImage: ImageButton
     private lateinit var btnResetList: ImageButton
     private lateinit var imgSearch: ImageView
+    private lateinit var txtContador: TextView
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -66,6 +68,7 @@ class PersonasFragment : Fragment() {
         btnResetList = view.findViewById(R.id.btn_reset_list)
         btnSubirImage = view.findViewById(R.id.btn_subir_buscar_imagen)
         txtSearch = view.findViewById(R.id.txt_search_person)
+        txtContador = view.findViewById(R.id.txt_contador_personas)
 
         adapter = MyAdapter(personsArrayList)
         recyclerView = view.findViewById(R.id.recycler_view)
@@ -110,6 +113,7 @@ class PersonasFragment : Fragment() {
         if (filteredList.isNotEmpty()) {
             adapter.setFilteredList(filteredList)
             adapter.notifyDataSetChanged()
+            txtContador.text = "Numero de personas: ${adapter.getList().size}"
         }
     }
 
@@ -133,7 +137,7 @@ class PersonasFragment : Fragment() {
     private fun searchFace(byteArray: ByteArray): Boolean{
         val builder = AlertDialog.Builder(context)
         val inflater = LayoutInflater.from(context)
-        builder.setView(inflater.inflate(R.layout.dialog_save_avistamiento, null))
+        builder.setView(inflater.inflate(R.layout.dialog_loading_search, null))
         builder.setCancelable(false)
         val dialog = builder.create()
         dialog.show()
@@ -169,9 +173,11 @@ class PersonasFragment : Fragment() {
                 if(response.isSuccessful) {
                     val resultados = response.body?.string()?.split(",") as List<String>
                     val filteredList = personsArrayList.filter { it.curp in resultados }
+
                     activity?.runOnUiThread {
                         adapter.setFilteredList(filteredList as ArrayList<Persons>)
                         adapter.notifyDataSetChanged()
+                        txtContador.text = "Numero de personas: ${adapter.getList().size}"
                         dialog.dismiss()
                         if(filteredList.isEmpty())
                             Toast.makeText(context, "No se encontraron resultados", Toast.LENGTH_SHORT).show()
@@ -188,15 +194,16 @@ class PersonasFragment : Fragment() {
 
     }
     private fun dataInitialize(){
+        var cont = 0
         personsArrayList.clear()
         adapter.setFilteredList(personsArrayList)
         btnResetList.isEnabled = false
         adapter.notifyDataSetChanged()
         val collectionRef = db.collection("persons").whereEqualTo("enabled", true)
         collectionRef.get().addOnSuccessListener {
-            var cont = 0
-            val size = it.documents.size
+            var size = 0
             for(document in it.documents){
+                size++
                 Log.d(document.id, document.data?.get("name").toString())
                 val enabled = document.data?.get("enabled") as Boolean
                 var imagen: Bitmap? = null
@@ -206,12 +213,15 @@ class PersonasFragment : Fragment() {
                 FirebaseStorage.getInstance().reference.child("$curp.jpg").getBytes(Long.MAX_VALUE).addOnSuccessListener {bytes ->
                     // Convertir bytes a Bitmap y mostrar en el ImageView
                     imagen = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                    imagen = Bitmap.createScaledBitmap(imagen!!, imagen!!.width/5, imagen!!.height/5, true)
+                    imagen = Bitmap.createScaledBitmap(imagen!!, imagen!!.width/4, imagen!!.height/4, true)
                 }.addOnSuccessListener {
                     personsArrayList.add(Persons(name, lugar, imagen!!, curp, enabled))
                     adapter.notifyDataSetChanged()
+
+                    txtContador.text = "Numero de personas: ${cont+1}"
                     cont++
                     Log.d("contador", cont.toString())
+                    Log.d("size", size.toString())
                     if(cont == size)
                         btnResetList.isEnabled = true
                 }

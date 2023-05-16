@@ -12,7 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,6 +43,11 @@
 
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/txt_contador_personas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Numero de personas: 0"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
