@@ -1,58 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".EstadoPersonActivity"
     android:layout_margin="10dp"
-    android:padding="10dp">
+    android:background="#F6EAFF"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".EstadoPersonActivity">
 
     <TextView
         android:id="@+id/txt_estado_nombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Cesar Maat Robles Castillo"
+        android:textAlignment="center"
+        android:textColor="#323232"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:textColor="#323232"
-        android:textAlignment="center" />
+        tools:text="Autorizar Registro" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Seleccione los parametros"
-        android:textSize="25sp"
         android:textColor="@color/black"
-        android:layout_marginTop="20dp"/>
+        android:textSize="25sp" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_aprobada"
         android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:background="@drawable/background_dependencia"
+        android:text="Aprobar esta solicitud"
+        android:textAlignment="center"
+        android:textSize="15sp" />
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:text="Aprobar esta solicitud"/>
-
+        android:layout_marginTop="20dp"
+        android:text="Estado de la persona"
+        android:textColor="@color/black"
+        android:textSize="25sp" />
     <Spinner
         android:id="@+id/spinner_situacion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"/>
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/banner_transparecia1" />
 
     <Button
         android:id="@+id/btn_actualizar_datos"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:text="Actualizar parametros"/>
+        android:backgroundTint="#CF81FF"
+        android:text="Validad Registro"
+        app:iconTint="#E3A4FF" />
 
     <Button
         android:id="@+id/btn_person_info"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:text="Ver datos de la persona"/>
+        android:backgroundTint="#CF81FF"
+        android:text="VISUALIZAR DATOS DE REGISTRO"
+        app:iconTint="#FFFFFF" />
 
 </LinearLayout>
