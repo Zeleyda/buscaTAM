@@ -41,7 +41,7 @@ class AdaptadorAvistamientos(private var avistamientosLista: ArrayList<Avistamie
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = avistamientosLista[position]
         holder.title.text = currentItem.titulo
-        holder.description.text = currentItem.descripcion
+        holder.description.text = currentItem.fecha
 
     }
 

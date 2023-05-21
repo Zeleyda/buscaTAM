@@ -15,6 +15,7 @@ class ListaAvistamientosActivity : AppCompatActivity() {
     lateinit var b: ActivityListaAvistamientosBinding
     val arrayList = arrayListOf<Avistamientos>()
     val adapter = AdaptadorAvistamientos(arrayList)
+    var changeLayout = true;
 
     lateinit var curp: String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +28,14 @@ class ListaAvistamientosActivity : AppCompatActivity() {
         b.recyclerViewAvistamientos.adapter = adapter
         b.recyclerViewAvistamientos.layoutManager = GridLayoutManager(this, 1)
         b.recyclerViewAvistamientos.setHasFixedSize(true)
+
+        b.btnCambiarVista.setOnClickListener {
+            if(changeLayout)
+                b.recyclerViewAvistamientos.layoutManager = GridLayoutManager(this, 2);
+            else
+                b.recyclerViewAvistamientos.layoutManager = GridLayoutManager(this, 1);
+            changeLayout = !changeLayout;
+        }
 
         adapter.setOnItemClickListener(object : AdaptadorAvistamientos.onItemClickListener{
             override fun onItemClick(position: Int) {
