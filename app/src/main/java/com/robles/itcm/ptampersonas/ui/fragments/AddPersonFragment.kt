@@ -4,9 +4,11 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +20,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -71,7 +74,6 @@ class AddPersonFragment : Fragment() {
     private lateinit var btnGuardarPersona: MaterialButton
     private lateinit var spinner: Spinner
 
-    private lateinit var toolbar: Toolbar
     private lateinit var imageUri: Uri
 
     private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->

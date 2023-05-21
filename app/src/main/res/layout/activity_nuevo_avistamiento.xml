@@ -12,7 +12,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_map"
+        app:layout_constraintBottom_toTopOf="@+id/mapViewNuevo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -138,11 +138,23 @@
                 android:layout_marginBottom="20dp"
                 android:text="Guardar" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Radio"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
     </ScrollView>
 
-    <fragment
-        android:id="@+id/fragment_map"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapViewNuevo"
         android:name="com.robles.itcm.ptampersonas.ui.fragments.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="250dp"
@@ -152,5 +164,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1"
         android:layout_margin="5dp"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

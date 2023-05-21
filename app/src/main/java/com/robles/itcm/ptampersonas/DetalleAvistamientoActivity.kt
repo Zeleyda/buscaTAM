@@ -51,16 +51,18 @@ class DetalleAvistamientoActivity : AppCompatActivity(), OnMapReadyCallback {
                 b.txtDetalleAvistamientoTitulo.setText(it.result.data?.get("titulo").toString())
                 b.txtDetalleAvistamientoDescripcion.setText(it.result.data?.get("descripcion").toString())
                 b.txtDetalleAvistamientoFecha.setText(it.result.data?.get("fecha").toString())
+                val radius = it.result.data?.get("radio") as? Double ?: 1000.0
                 val latlon = it.result.data?.get("latlon") as GeoPoint
+
                 circle?.remove()
                 val location = LatLng(latlon.latitude, latlon.longitude)
                 val circleOptions = CircleOptions()
                     .center(location)
-                    .radius(1000.0) // radio en metros
+                    .radius(radius) // radio en metros
                     .strokeColor(Color.RED) // color del borde
                     .fillColor(0x220000FF) // color de relleno
                 circle = map.addCircle(circleOptions)
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 13.5F))
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.5F))
             }
         }
     }

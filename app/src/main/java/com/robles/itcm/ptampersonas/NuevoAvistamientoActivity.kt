@@ -3,6 +3,7 @@ package com.robles.itcm.ptampersonas
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,12 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.Circle
+import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
@@ -18,7 +25,7 @@ import com.robles.itcm.ptampersonas.databinding.ActivityNuevoAvistamientoBinding
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 
-class NuevoAvistamientoActivity : AppCompatActivity() {
+class NuevoAvistamientoActivity : AppCompatActivity(), OnMapReadyCallback{
 
     var imageUri = null as Uri?
     lateinit var b: ActivityNuevoAvistamientoBinding
@@ -27,6 +34,11 @@ class NuevoAvistamientoActivity : AppCompatActivity() {
     val storage = FirebaseStorage.getInstance()
     lateinit var builder: AlertDialog.Builder
     lateinit var dialog: AlertDialog
+    var circle: Circle? = null
+    var radius = 1000f
+    var latlng = LatLng(22.2784909,-97.8337838)
+    var mapClicked = false;
+    lateinit var googleMap: GoogleMap
 
     private val selectImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
@@ -40,11 +52,28 @@ class NuevoAvistamientoActivity : AppCompatActivity() {
         b = ActivityNuevoAvistamientoBinding.inflate(layoutInflater)
         setContentView(b.root)
 
+        b.mapViewNuevo.onCreate(savedInstanceState)
+        b.mapViewNuevo.getMapAsync(this)
+
         curp = intent.getStringExtra("curp").toString()
         Toast.makeText(this, "Curp: $curp", Toast.LENGTH_SHORT).show()
         SessionData.setData("lat", -1.0)
         SessionData.setData("lon", -1.0)
         SessionData.setData("id_avistamiento", "-1")
+
+
+        b.slider.valueFrom = 100f
+        b.slider.valueTo = 1000f
+        b.slider.stepSize = 10f
+        b.slider.value = 100f
+
+        b.slider.addOnChangeListener { slider, value, fromUser ->
+            radius = value
+            if(mapClicked)
+                drawCircle()
+        }
+
+
 
         b.btnAddImageNuevoAvistamiento.setOnClickListener {
             selectImageLauncher.launch("image/*")
@@ -52,10 +81,9 @@ class NuevoAvistamientoActivity : AppCompatActivity() {
 
         b.btnGuardarAvistamiento.setOnClickListener{
             b.btnGuardarAvistamiento.isEnabled = false
-            if(SessionData.getData("lat") != -1.0 && SessionData.getData("lon") != -1.0 && !b.txtNuevoAvistamientoTitulo.text.isNullOrEmpty()
-                && !b.txtNuevoAvistamientoDescripcion.text.isNullOrEmpty() && !b.txtFechaNuevoAvistamientoHora.text.isNullOrEmpty() && imageUri != null){
-
-                showDialow()
+            if(mapClicked && !b.txtNuevoAvistamientoTitulo.text.isNullOrEmpty() && !b.txtNuevoAvistamientoDescripcion.text.isNullOrEmpty()
+                && !b.txtFechaNuevoAvistamientoHora.text.isNullOrEmpty() && imageUri != null){
+                showDialog()
 
                 val bitmap = (b.imgNuevoAvistamiento.drawable as BitmapDrawable).bitmap
                 val stream = ByteArrayOutputStream()
@@ -70,7 +98,8 @@ class NuevoAvistamientoActivity : AppCompatActivity() {
                             "titulo" to b.txtNuevoAvistamientoTitulo.text.toString(),
                             "descripcion" to b.txtNuevoAvistamientoDescripcion.text.toString(),
                             "fecha" to b.txtFechaNuevoAvistamientoHora.text.toString(),
-                            "latlon" to SessionData.getData("latlon"),
+                            "latlon" to GeoPoint(latlng.latitude, latlng.longitude),
+                            "radio" to radius,
                             "image" to uuid
                         )
                     ).addOnCompleteListener {
@@ -107,11 +136,55 @@ class NuevoAvistamientoActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDialow() {
+    private fun showDialog() {
         builder = AlertDialog.Builder(this)
         builder.setView(LayoutInflater.from(this).inflate(R.layout.dialog_save_avistamiento, null))
         builder.setCancelable(false)
         dialog = builder.create()
         dialog.show()
     }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        val location = LatLng(22.2784909,-97.8337838)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10f))
+        googleMap.setMinZoomPreference(5f)
+        googleMap.setMaxZoomPreference(15f)
+
+        googleMap.setOnMapClickListener {
+            mapClicked = true
+            latlng = it
+            drawCircle();
+        }
+    }
+
+    private fun drawCircle(){
+        circle?.remove()
+        val circleOptions = CircleOptions()
+            .center(latlng)
+            .radius(radius.toDouble()) // radio en metros
+            .strokeColor(Color.RED) // color del borde
+            .fillColor(0x220000FF) // color de relleno
+        circle = googleMap.addCircle(circleOptions)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        b.mapViewNuevo.onResume()
+    }
+    override fun onPause() {
+        super.onPause()
+        b.mapViewNuevo.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        b.mapViewNuevo.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        b.mapViewNuevo.onLowMemory()
+    }
+
 }
