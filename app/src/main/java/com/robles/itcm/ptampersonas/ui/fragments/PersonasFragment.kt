@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,8 +21,12 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.robles.itcm.ptampersonas.MyAdapter
@@ -52,6 +57,7 @@ class PersonasFragment : Fragment() {
     private lateinit var imgSearch: ImageView
     private lateinit var txtContador: TextView
 
+    private lateinit var swipeLayout: SwipeRefreshLayout
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
@@ -70,8 +76,10 @@ class PersonasFragment : Fragment() {
         btnSubirImage = view.findViewById(R.id.btn_subir_buscar_imagen)
         txtSearch = view.findViewById(R.id.txt_search_person)
         txtContador = view.findViewById(R.id.txt_contador_personas)
+        swipeLayout = view.findViewById(R.id.swipe_layout)
 
         adapter = MyAdapter(personsArrayList)
+
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = GridLayoutManager(context, 1)
@@ -84,6 +92,10 @@ class PersonasFragment : Fragment() {
         }
 
         btnResetList.setOnClickListener{
+            dataInitialize()
+        }
+
+        swipeLayout.setOnRefreshListener {
             dataInitialize()
         }
 
@@ -176,14 +188,16 @@ class PersonasFragment : Fragment() {
                     val filteredList = personsArrayList.filter { it.curp in resultados }
 
                     activity?.runOnUiThread {
-                        adapter.setFilteredList(filteredList as ArrayList<Persons>)
-                        adapter.notifyDataSetChanged()
-                        txtContador.text = "Numero de personas: ${adapter.getList().size}"
+
                         dialog.dismiss()
                         if(filteredList.isEmpty())
                             Toast.makeText(context, "No se encontraron resultados", Toast.LENGTH_SHORT).show()
-                        else
+                        else {
+                            adapter.setFilteredList(filteredList as ArrayList<Persons>)
+                            adapter.notifyDataSetChanged()
+                            txtContador.text = "Numero de personas: ${adapter.getList().size}"
                             Toast.makeText(context, "Se encontraron los siguientes resultados", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
                 else
@@ -195,6 +209,8 @@ class PersonasFragment : Fragment() {
 
     }
     private fun dataInitialize(){
+        txtSearch.setQuery("", true);
+
         var cont = 0
         personsArrayList.clear()
         adapter.setFilteredList(personsArrayList)
@@ -227,8 +243,11 @@ class PersonasFragment : Fragment() {
                         btnResetList.isEnabled = true
                 }
             }
+            swipeLayout.isRefreshing = false
         }.addOnFailureListener {
             Toast.makeText(context, "Error + ${it.toString()}", Toast.LENGTH_SHORT).show()
+            swipeLayout.isRefreshing = false
+
         }
 
     }
